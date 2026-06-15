@@ -156,24 +156,45 @@ export default function AICopilot() {
           ))}
 
           {loading && (
-            <div
-              className="grid gap-2 p-4 rounded-lg"
-              style={{ maxWidth: '72%', border: '1px solid var(--line)', background: 'rgba(255,255,255,.04)' }}
-            >
-              <strong style={{ fontSize: 14 }}>CommuteIQ</strong>
-              <div className="flex gap-1.5 items-center" style={{ height: 20 }}>
-                {[0,1,2].map(d => (
-                  <motion.span
-                    key={d}
-                    className="w-2 h-2 rounded-full block"
-                    style={{ background: 'var(--muted)' }}
-                    animate={{ opacity: [0.3, 1, 0.3] }}
-                    transition={{ duration: 1.2, repeat: Infinity, delay: d * 0.2 }}
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+  <div
+    className="grid gap-2 p-4 rounded-lg"
+    style={{
+      maxWidth: '72%',
+      border: '1px solid var(--line)',
+      background: 'rgba(255,255,255,.04)'
+    }}
+  >
+    <strong style={{ fontSize: 14 }}>CommuteIQ</strong>
+
+    <p
+      style={{
+        color: 'var(--text-soft)',
+        margin: 0
+      }}
+    >
+      Analyzing live traffic, weather and strategy data...
+    </p>
+
+    <div
+      className="flex gap-1.5 items-center"
+      style={{ height: 20 }}
+    >
+      {[0,1,2].map(d => (
+        <motion.span
+          key={d}
+          className="w-2 h-2 rounded-full block"
+          style={{ background: 'var(--muted)' }}
+          animate={{ opacity: [0.3, 1, 0.3] }}
+          transition={{
+            duration: 1.2,
+            repeat: Infinity,
+            delay: d * 0.2
+          }}
+        />
+      ))}
+    </div>
+  </div>
+)}
           <div ref={bottomRef} />
         </div>
 
@@ -209,7 +230,7 @@ export default function AICopilot() {
             }}
           >
             <Send size={14} />
-            Send
+{loading ? 'Thinking...' : 'Send'}
           </button>
         </div>
       </div>
