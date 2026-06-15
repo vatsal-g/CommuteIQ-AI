@@ -125,6 +125,11 @@ useEffect(() => {
             <p style={{ color: 'var(--text-soft)', lineHeight: 1.55, fontSize: 14 }}>
               This route trades 8 extra minutes for a major drop in crowd density, a lower transfer risk, and a more predictable last mile.
             </p>
+            {recommendation && (
+              <pre style={{ color: 'var(--text-soft)', lineHeight: 1.5, fontSize: 13, marginTop: 12, whiteSpace: 'pre-wrap' }}>
+                {JSON.stringify(recommendation, null, 2)}
+              </pre>
+            )}
           </div>
         </div>
       </div>
