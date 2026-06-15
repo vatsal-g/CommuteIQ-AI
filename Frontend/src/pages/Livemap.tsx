@@ -10,18 +10,26 @@ import "leaflet/dist/leaflet.css";
 
 export default function LiveMap() {
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
+    <div
+      style={{
+        height: "100vh",
+        width: "100%",
+        position: "relative"
+      }}
+    >
       <MapContainer
         center={[28.6328, 77.2197]}
         zoom={13}
-        style={{ height: "100%", width: "100%" }}
+        style={{
+          height: "100%",
+          width: "100%"
+        }}
       >
         <TileLayer
           attribution="&copy; OpenStreetMap contributors"
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {/* Rajiv Chowk Marker */}
         <Marker position={[28.6328, 77.2197]}>
           <Popup>Rajiv Chowk Metro</Popup>
         </Marker>
@@ -53,11 +61,10 @@ export default function LiveMap() {
         />
       </MapContainer>
 
-      {/* Recommendation Card */}
       <div
         style={{
           position: "absolute",
-          top: "100px",
+          top: "20px",
           right: "20px",
           zIndex: 1000,
           background: "#0f172a",

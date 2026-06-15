@@ -87,10 +87,11 @@ function AppInner() {
           <Route path="/leave-later" element={<LeaveLaterSimulator />} />
           <Route path="/carpool" element={<Carpool />} />
           <Route path="/copilot" element={<AICopilot />} />
-          <Route path="/livemap" element={<LiveMap />} />
+          
 <Route path="/saved-routes" element={<ProtectedPage onAuthOpen={openAuth}><SavedRoutes /></ProtectedPage>} />
 <Route path="/preferences" element={<ProtectedPage onAuthOpen={openAuth}><Preferences /></ProtectedPage>} />
 <Route path="/account-settings" element={<ProtectedPage onAuthOpen={openAuth}><AccountSettings /></ProtectedPage>} />
+<Route path="/livemap" element={<LiveMap />} />
 </Routes>
       </MainLayout>
 
