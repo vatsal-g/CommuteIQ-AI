@@ -2,7 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
-
+const routesApi =
+require("./routes/routes_api");
 const reliabilityRoutes =
 require("./routes/reliability_route");
 
@@ -40,6 +41,10 @@ app.use(
 app.use(
   "/api/recommendation",
   recommendationRoutes
+);
+app.use(
+ "/api/routes",
+ routesApi
 );
 
 app.listen(5000, () => {
