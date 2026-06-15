@@ -2,6 +2,38 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 
 export default function TravelInsights() {
+  const stations = [
+  {
+    name: "Rajiv Chowk",
+    crowd: "High",
+    delay: "5 min",
+    status: "Operational"
+  },
+  {
+    name: "Vaishali",
+    crowd: "Medium",
+    delay: "2 min",
+    status: "Operational"
+  },
+  {
+    name: "Botanical Garden",
+    crowd: "Low",
+    delay: "0 min",
+    status: "Operational"
+  },
+  {
+    name: "Noida City Centre",
+    crowd: "Medium",
+    delay: "1 min",
+    status: "Operational"
+  },
+  {
+    name: "HUDA City Centre",
+    crowd: "High",
+    delay: "4 min",
+    status: "Operational"
+  }
+];
   const [dashboardData, setDashboardData] = useState<any>(null);
   const [recommendationData, setRecommendationData] = useState<any>(null);
   useEffect(() => {
@@ -371,6 +403,59 @@ fetchRecommendation();
   </div>
 </article>
       </div>
+      {/* LIVE METRO INTELLIGENCE */}
+
+<div className="mt-8">
+  <h3
+    style={{
+      fontSize: "28px",
+      fontWeight: 700,
+      marginBottom: "20px",
+    }}
+  >
+    Metro Station Intelligence
+  </h3>
+
+  <div
+    className="grid gap-4"
+    style={{
+      gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
+    }}
+  >
+    {stations.map((station) => (
+      <article
+        key={station.name}
+        className="p-[18px] rounded-lg"
+        style={{
+          border: "1px solid var(--line)",
+          background: "rgba(15,23,42,.62)",
+        }}
+      >
+        <h4
+          style={{
+            fontSize: "20px",
+            fontWeight: 700,
+            marginBottom: "12px",
+          }}
+        >
+          {station.name}
+        </h4>
+
+        <p style={{ marginBottom: "8px" }}>
+          Crowd Level: <strong>{station.crowd}</strong>
+        </p>
+
+        <p style={{ marginBottom: "8px" }}>
+          Delay: <strong>{station.delay}</strong>
+        </p>
+
+        <p>
+          Status: <strong>{station.status}</strong>
+        </p>
+      </article>
+    ))}
+  </div>
+</div>
     </motion.section>
   );
 }

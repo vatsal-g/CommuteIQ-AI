@@ -1,4 +1,6 @@
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
+import axios from 'axios'
 
 const timelineSteps = [
   { icon: 'M', title: 'Metro Yellow Line', sub: 'Home to Rajiv Chowk', time: '18 min' },
@@ -7,6 +9,18 @@ const timelineSteps = [
 ]
 
 export default function StrategyDetails() {
+  const [recommendation, setRecommendation] = useState<any>(null)
+
+useEffect(() => {
+  axios
+    .get("http://localhost:5000/api/recommendation")
+    .then((res) => {
+      setRecommendation(res.data)
+    })
+    .catch((err) => {
+      console.error(err)
+    })
+}, [])
   return (
     <motion.section className="page-enter page-content"
       style={{ minHeight: 'calc(100vh - 76px)', padding: 'clamp(34px,5vw,58px) clamp(18px,5vw,64px) 118px' }}
@@ -16,10 +30,26 @@ export default function StrategyDetails() {
         <span className="inline-flex items-center justify-center w-[42px] h-[42px] flex-shrink-0 rounded-md text-[13px] font-bold"
           style={{ border: '1px solid var(--line)', background: 'rgba(255,255,255,.04)', color: 'var(--text-soft)' }}>04</span>
         <div>
-          <h2 style={{ fontSize: 'clamp(34px,5vw,68px)', lineHeight: 1, fontWeight: 810 }}>Comfort Strategy</h2>
-          <p className="mt-3" style={{ maxWidth: 650, color: 'var(--text-soft)', fontSize: 17, lineHeight: 1.55 }}>
-            Low crowd, fewer transfers, and the strongest reliability profile.
-          </p>
+         <h2
+  style={{
+    fontSize: 'clamp(34px,5vw,68px)',
+    lineHeight: 1,
+    fontWeight: 810
+  }}
+>
+  {recommendation?.recommended_mode || "Loading Strategy..."}
+</h2>
+          <p
+  className="mt-3"
+  style={{
+    maxWidth: 650,
+    color: 'var(--text-soft)',
+    fontSize: 17,
+    lineHeight: 1.55
+  }}
+>
+  {recommendation?.reason || "Fetching recommendation..."}
+</p>
         </div>
       </div>
 
@@ -27,7 +57,12 @@ export default function StrategyDetails() {
         {/* Timeline panel */}
         <div className="rounded-lg p-[18px]" style={{ border: '1px solid var(--line)', background: 'rgba(15,23,42,.62)' }}>
           <div className="grid gap-2.5 mb-[18px]" style={{ gridTemplateColumns: 'repeat(4,1fr)' }}>
-            {['50 min', 'Rs75', 'Low crowd', 'Stress 2/10'].map(m => (
+            {[
+  `${recommendation?.estimated_time_saved || 0} min saved`,
+  `${recommendation?.confidence || 0}% confidence`,
+  recommendation?.recommended_mode || "Route",
+  "AI Powered"
+].map(m => (
               <span key={m} className="inline-flex items-center justify-center rounded-md text-[13px] font-bold"
                 style={{ minHeight: 58, border: '1px solid var(--line)', background: 'rgba(255,255,255,.035)', color: 'var(--text-soft)' }}>{m}</span>
             ))}

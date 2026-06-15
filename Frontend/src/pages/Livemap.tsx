@@ -1,3 +1,6 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
 import {
   MapContainer,
   TileLayer,
@@ -8,18 +11,108 @@ import {
 
 import "leaflet/dist/leaflet.css";
 
-export default function LiveMap() {
+interface LiveMapProps {
+  source: string;
+  destination: string;
+}
+
+export default function LiveMap({
+  source,
+  destination
+}: LiveMapProps) {
+  const [sourceCoords, setSourceCoords] = useState<
+    [number, number] | null
+  >(null);
+
+  const [destCoords, setDestCoords] = useState<
+    [number, number] | null
+  >(null);
+
+  const [routeCoords, setRouteCoords] = useState<any[]>([]);
+
+  // Convert place name -> coordinates
+  useEffect(() => {
+    const getCoordinates = async (
+      place: string,
+      setter: React.Dispatch<
+        React.SetStateAction<[number, number] | null>
+      >
+    ) => {
+      if (!place) return;
+
+      try {
+        const res = await axios.get(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+            place
+          )}&format=json&limit=1`
+        );
+
+        if (res.data.length > 0) {
+          const lat = parseFloat(res.data[0].lat);
+          const lon = parseFloat(res.data[0].lon);
+
+          setter([lat, lon]);
+        }
+      } catch (err) {
+        console.error("Geocoding Error:", err);
+      }
+    };
+
+    getCoordinates(source, setSourceCoords);
+    getCoordinates(destination, setDestCoords);
+  }, [source, destination]);
+
+  // Fetch real road route
+  useEffect(() => {
+    const getRoute = async () => {
+      if (!sourceCoords || !destCoords) return;
+
+      try {
+        const apiKey = import.meta.env.VITE_ORS_API_KEY;
+
+        const response = await axios.post(
+          "https://api.openrouteservice.org/v2/directions/driving-car/geojson",
+          {
+            coordinates: [
+              [sourceCoords[1], sourceCoords[0]],
+              [destCoords[1], destCoords[0]]
+            ]
+          },
+          {
+            headers: {
+              Authorization: apiKey,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+
+        const coords =
+          response.data.features[0].geometry.coordinates.map(
+            (coord: number[]) => [coord[1], coord[0]]
+          );
+
+        setRouteCoords(coords);
+
+        console.log("Route Loaded:", coords);
+      } catch (err) {
+        console.error("Route Error:", err);
+      }
+    };
+
+    getRoute();
+  }, [sourceCoords, destCoords]);
+
   return (
     <div
       style={{
-        height: "100vh",
+        height: "100%",
         width: "100%",
         position: "relative"
       }}
     >
       <MapContainer
         center={[28.6328, 77.2197]}
-        zoom={13}
+        zoom={11}
         style={{
           height: "100%",
           width: "100%"
@@ -30,35 +123,27 @@ export default function LiveMap() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <Marker position={[28.6328, 77.2197]}>
-          <Popup>Rajiv Chowk Metro</Popup>
-        </Marker>
+        {sourceCoords && (
+          <Marker position={sourceCoords}>
+            <Popup>{source}</Popup>
+          </Marker>
+        )}
 
-        {/* Recommended Route */}
-        <Polyline
-          positions={[
-            [28.6100, 77.2000],
-            [28.6328, 77.2197],
-            [28.6500, 77.2400]
-          ]}
-          pathOptions={{
-            color: "green",
-            weight: 6
-          }}
-        />
+        {destCoords && (
+          <Marker position={destCoords}>
+            <Popup>{destination}</Popup>
+          </Marker>
+        )}
 
-        {/* Alternative Route */}
-        <Polyline
-          positions={[
-            [28.6100, 77.2000],
-            [28.6400, 77.2350],
-            [28.6500, 77.2400]
-          ]}
-          pathOptions={{
-            color: "red",
-            weight: 6
-          }}
-        />
+        {routeCoords.length > 0 && (
+          <Polyline
+            positions={routeCoords}
+            pathOptions={{
+              color: "green",
+              weight: 6
+            }}
+          />
+        )}
       </MapContainer>
 
       <div
@@ -78,20 +163,22 @@ export default function LiveMap() {
         <h3>Commute Copilot</h3>
 
         <p>
-          <strong>Recommended Route:</strong>
+          <strong>From:</strong>
           <br />
-          Route A
+          {source || "Enter source"}
         </p>
 
         <p>
-          <strong>Confidence:</strong> 90%
+          <strong>To:</strong>
+          <br />
+          {destination || "Enter destination"}
         </p>
 
         <p>
-          <strong>Time Saved:</strong> 4 min
+          <strong>Status:</strong>
+          <br />
+          Real road route enabled
         </p>
-
-        <p>Traffic conditions stable</p>
       </div>
     </div>
   );

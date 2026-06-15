@@ -14,7 +14,7 @@ import AICopilot from './pages/AICopilot'
 import SavedRoutes from './pages/SavedRoutes'
 import Preferences from './pages/Preferences'
 import AccountSettings from './pages/AccountSettings'
-import LiveMap from "./pages/Livemap";
+
 
 interface ProtectedPageProps {
   children: React.ReactNode
@@ -91,7 +91,7 @@ function AppInner() {
 <Route path="/saved-routes" element={<ProtectedPage onAuthOpen={openAuth}><SavedRoutes /></ProtectedPage>} />
 <Route path="/preferences" element={<ProtectedPage onAuthOpen={openAuth}><Preferences /></ProtectedPage>} />
 <Route path="/account-settings" element={<ProtectedPage onAuthOpen={openAuth}><AccountSettings /></ProtectedPage>} />
-<Route path="/livemap" element={<LiveMap />} />
+{/* <Route path="/livemap" element={<LiveMap />}/> */}
 </Routes>
       </MainLayout>
 
