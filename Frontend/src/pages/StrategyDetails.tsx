@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useLocation } from 'react-router-dom'
 
 const timelineSteps = [
   { icon: 'M', title: 'Metro Yellow Line', sub: 'Home to Rajiv Chowk', time: '18 min' },
@@ -9,7 +10,17 @@ const timelineSteps = [
 ]
 
 export default function StrategyDetails() {
+  const location = useLocation()
+
+const strategy = location.state?.strategy
   const [recommendation, setRecommendation] = useState<any>(null)
+if (!strategy) {
+  return (
+    <div style={{ padding: 40 }}>
+      No strategy selected
+    </div>
+  )
+}
 
 useEffect(() => {
   axios
@@ -37,7 +48,9 @@ useEffect(() => {
     fontWeight: 810
   }}
 >
-  {recommendation?.recommended_mode || "Loading Strategy..."}
+  
+  {strategy.label}
+
 </h2>
           <p
   className="mt-3"
@@ -48,7 +61,7 @@ useEffect(() => {
     lineHeight: 1.55
   }}
 >
-  {recommendation?.reason || "Fetching recommendation..."}
+  Selected strategy: {strategy.label}
 </p>
         </div>
       </div>
@@ -58,10 +71,13 @@ useEffect(() => {
         <div className="rounded-lg p-[18px]" style={{ border: '1px solid var(--line)', background: 'rgba(15,23,42,.62)' }}>
           <div className="grid gap-2.5 mb-[18px]" style={{ gridTemplateColumns: 'repeat(4,1fr)' }}>
             {[
-  `${recommendation?.estimated_time_saved || 0} min saved`,
-  `${recommendation?.confidence || 0}% confidence`,
-  recommendation?.recommended_mode || "Route",
+  
+  
+  strategy.time,
+  strategy.price,
+  strategy.label,
   "AI Powered"
+
 ].map(m => (
               <span key={m} className="inline-flex items-center justify-center rounded-md text-[13px] font-bold"
                 style={{ minHeight: 58, border: '1px solid var(--line)', background: 'rgba(255,255,255,.035)', color: 'var(--text-soft)' }}>{m}</span>

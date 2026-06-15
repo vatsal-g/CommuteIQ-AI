@@ -81,9 +81,18 @@ function AppInner() {
             element={
               <ProtectedPage onAuthOpen={() => openAuth('/travel-insights')}>
                 <TravelInsights />
+                
               </ProtectedPage>
             }
           />
+          <Route
+  path="/intel"
+  element={
+    <ProtectedPage onAuthOpen={() => openAuth('/intel')}>
+      <TravelInsights />
+    </ProtectedPage>
+  }
+/>
           <Route path="/leave-later" element={<LeaveLaterSimulator />} />
           <Route path="/carpool" element={<Carpool />} />
           <Route path="/copilot" element={<AICopilot />} />

@@ -3,33 +3,44 @@ import { motion } from 'framer-motion'
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const strategies = [
-  {
-    letter: 'A', type: 'fastest', label: 'Fastest', time: '42 min', price: 'Rs90',
-    stats: [['Reliability','78%'],['Stress Score','7/10'],['Carbon Impact','Medium'],['Crowd Level','High']],
-    letterStyle: { background: 'rgba(245,158,11,.14)', color: '#fde68a' },
+const letterStyles: any = {
+  A: {
+    background: 'rgba(245,158,11,.14)',
+    color: '#fde68a',
   },
-  {
-    letter: 'B', type: 'budget', label: 'Budget', time: '60 min', price: 'Rs25',
-    stats: [['Reliability','82%'],['Stress Score','5/10'],['Carbon Impact','High'],['Crowd Level','Medium']],
-    letterStyle: { background: 'rgba(59,130,246,.14)', color: '#bfdbfe' },
+  B: {
+    background: 'rgba(59,130,246,.14)',
+    color: '#bfdbfe',
   },
-  {
-    letter: 'C', type: 'comfort', label: 'Comfort', time: '50 min', price: 'Rs75',
-    recommended: true,
-    stats: [['Reliability','93%'],['Stress Score','2/10'],['Carbon Impact','Medium'],['Crowd Level','Low']],
-    letterStyle: { background: 'rgba(16,185,129,.14)', color: '#a7f3d0' },
+  C: {
+    background: 'rgba(16,185,129,.14)',
+    color: '#a7f3d0',
   },
-  {
-    letter: 'D', type: 'green', label: 'Green', time: '55 min', price: 'Rs40',
-    stats: [['Reliability','88%'],['Stress Score','4/10'],['CO2 Saved','1.8 kg'],['Crowd Level','Medium']],
-    letterStyle: { background: 'rgba(34,197,94,.14)', color: '#bbf7d0' },
+  D: {
+    background: 'rgba(34,197,94,.14)',
+    color: '#bbf7d0',
   },
-]
+}
 
 export default function StrategyEngine() {
   const navigate = useNavigate()
+const [strategies, setStrategies] = useState<any[]>([])
 
+useEffect(() => {
+  const fetchStrategies = async () => {
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/strategies"
+      )
+
+      setStrategies(res.data.strategies)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  fetchStrategies()
+}, [])
   return (
     <motion.section className="page-enter page-content"
       style={{ minHeight: 'calc(100vh - 76px)', padding: 'clamp(28px,4vw,40px) clamp(18px,5vw,64px) 118px' }}
@@ -56,7 +67,13 @@ export default function StrategyEngine() {
               background: 'rgba(15,23,42,.62)',
               boxShadow: s.recommended ? '0 20px 60px rgba(16,185,129,.11)' : undefined,
             }}
-            onClick={() => navigate('/strategy-details')}>
+            onClick={() =>
+  navigate('/strategy-details', {
+    state: {
+      strategy: s,
+    },
+  })
+}>
             {s.recommended && (
               <div className="absolute top-3.5 right-3.5 inline-flex items-center justify-center min-h-[26px] px-2.5 rounded-full text-[11px] font-extrabold"
                 style={{ border: '1px solid rgba(16,185,129,.32)', background: 'rgba(16,185,129,.1)', color: '#a7f3d0' }}>
@@ -65,7 +82,7 @@ export default function StrategyEngine() {
             )}
             <div className="grid gap-3 items-start">
               <span className="inline-flex items-center justify-center w-[34px] h-[34px] rounded-md text-[12px] font-extrabold"
-                style={s.letterStyle}>{s.letter}</span>
+                style={letterStyles[s.letter]}>{s.letter}</span>
               <h3 style={{ fontSize: 20, fontWeight: 700 }}>{s.label}</h3>
               <span className="inline-flex items-center justify-center min-h-[26px] px-2.5 rounded-full text-[11px] font-extrabold w-max"
                 style={{ border: '1px solid rgba(16,185,129,.32)', background: 'rgba(16,185,129,.1)', color: '#a7f3d0' }}>
@@ -74,8 +91,7 @@ export default function StrategyEngine() {
             </div>
             <strong style={{ fontSize: 38, lineHeight: 1 }}>{s.price}</strong>
             <dl>
-              {s.stats.map(([k, v]) => (
-                <div key={k} className="flex items-center justify-between gap-4 pt-3" style={{ borderTop: '1px solid var(--line)' }}>
+              {s.stats.map(([k, v]: [string, string]) => (                <div key={k} className="flex items-center justify-between gap-4 pt-3" style={{ borderTop: '1px solid var(--line)' }}>
                   <dt style={{ color: 'var(--muted)', fontSize: 13 }}>{k}</dt>
                   <dd style={{ margin: 0, color: 'var(--text-soft)', fontSize: 13, fontWeight: 750 }}>{v}</dd>
                 </div>
@@ -96,9 +112,17 @@ export default function StrategyEngine() {
             Strategy C is best because it avoids the highest crowd window while keeping arrival within the requested budget and time.
           </p>
         </div>
-        <button onClick={() => navigate('/strategy-details')}
+        <button
+          onClick={() =>
+            navigate('/strategy-details', {
+              state: {
+                strategy: strategies.find((x: any) => x.recommended),
+              },
+            })
+          }
           className="flex-shrink-0 inline-flex items-center justify-center min-h-[48px] px-5 rounded-md text-sm font-bold transition-transform hover:-translate-y-px"
-          style={{ border: '1px solid rgba(79,70,229,.68)', background: 'var(--primary)', color: 'var(--text)', boxShadow: '0 18px 42px rgba(79,70,229,.32)' }}>
+          style={{ border: '1px solid rgba(79,70,229,.68)', background: 'var(--primary)', color: 'var(--text)', boxShadow: '0 18px 42px rgba(79,70,229,.32)' }}
+        >
           View Details
         </button>
       </div>

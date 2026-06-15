@@ -42,50 +42,60 @@ export default function AICopilot() {
   }, [messages])
 
   const send = async () => {
-    const text = input.trim()
-    if (!text || loading) return
+  const text = input.trim()
 
-    const userMsg: Message = { role: 'user', content: text, time: now() }
-    setMessages(prev => [...prev, userMsg])
-    setInput('')
-    setLoading(true)
+  if (!text || loading) return
 
-    try {
-      const history = [...messages, userMsg].map(m => ({
-        role: m.role === 'ai' ? 'assistant' : 'user',
-        content: m.content,
-      }))
-
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          system: `You are CommuteIQ, an AI commute intelligence assistant for New Delhi, India. 
-You help users optimize their daily commute between Home (Rajiv Chowk) and Cyber City, Gurugram.
-You know about: Delhi Metro (Yellow Line, Blue Line), carpooling, e-rickshaws, autos, traffic on NH48.
-Current active strategy: Strategy C (Comfort) – 50 min, Rs75, 93% reliability, stress 2/10.
-Respond concisely, in 2-4 sentences. Be data-driven and specific to Delhi commuting context.`,
-          messages: history,
-        }),
-      })
-
-      const data = await res.json()
-      const reply = data.content?.[0]?.text ?? "I couldn't fetch a response. Please try again."
-
-      setMessages(prev => [...prev, { role: 'ai', content: reply, time: now() }])
-    } catch {
-      setMessages(prev => [...prev, {
-        role: 'ai',
-        content: 'Connection error. Please check your network and try again.',
-        time: now(),
-      }])
-    } finally {
-      setLoading(false)
-    }
+  const userMsg: Message = {
+    role: 'user',
+    content: text,
+    time: now(),
   }
 
+  setMessages(prev => [...prev, userMsg])
+  setInput('')
+  setLoading(true)
+
+  try {
+    const res = await fetch('http://localhost:5000/api/copilot', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        message: text,
+      }),
+    })
+
+    const data = await res.json()
+
+    const reply =
+      data.reply ||
+      'Unable to generate response'
+
+    setMessages(prev => [
+      ...prev,
+      {
+        role: 'ai',
+        content: reply,
+        time: now(),
+      },
+    ])
+  } catch {
+    setMessages(prev => [
+      ...prev,
+      {
+        role: 'ai',
+        content: 'Connection error. Please check your backend server.',
+        time: now(),
+      },
+    ])
+  } finally {
+    setLoading(false)
+  }
+}
+
+      
   const handleKey = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send() }
   }
