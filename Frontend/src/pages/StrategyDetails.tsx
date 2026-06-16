@@ -24,7 +24,7 @@ if (!strategy) {
 
 useEffect(() => {
   axios
-    .get("http://localhost:5000/api/recommendation")
+    .get("https://commuteiq-ai-backend.onrender.com/api/recommendation")
     .then((res) => {
       setRecommendation(res.data)
     })

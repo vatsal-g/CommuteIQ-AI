@@ -30,7 +30,7 @@ useEffect(() => {
   const fetchStrategies = async () => {
     try {
       const res = await axios.get(
-        "http://localhost:5000/api/strategies"
+        "https://commuteiq-ai-backend.onrender.com/api/strategies"
       )
 
       setStrategies(res.data.strategies)

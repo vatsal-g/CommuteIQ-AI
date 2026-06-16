@@ -6,11 +6,11 @@ router.get("/", async (req, res) => {
   try {
 
     const dashboardRes = await axios.get(
-      "http://localhost:5000/api/reliability/dashboard"
+      "https://commuteiq-ai-backend.onrender.com/api/reliability/dashboard"
     );
 
     const recommendationRes = await axios.get(
-      "http://localhost:5000/api/recommendation"
+      "https://commuteiq-ai-backend.onrender.com/api/recommendation"
     );
 
     const dashboard = dashboardRes.data;

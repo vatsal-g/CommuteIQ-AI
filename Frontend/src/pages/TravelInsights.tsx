@@ -40,7 +40,7 @@ export default function TravelInsights() {
     const fetchDashboard = async () => {
       try {
         const response = await fetch(
-          "http://localhost:5000/api/reliability/dashboard"
+          "https://commuteiq-ai-backend.onrender.com/api/reliability/dashboard"
         );
 
         const data = await response.json();
@@ -57,7 +57,7 @@ export default function TravelInsights() {
   try {
 
     const response = await fetch(
-      "http://localhost:5000/api/recommendation"
+      "https://commuteiq-ai-backend.onrender.com/api/recommendation"
     );
 
     const data = await response.json();

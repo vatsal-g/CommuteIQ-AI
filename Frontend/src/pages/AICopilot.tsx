@@ -57,7 +57,7 @@ export default function AICopilot() {
   setLoading(true)
 
   try {
-    const res = await fetch('http://localhost:5000/api/copilot', {
+    const res = await fetch('https://commuteiq-ai-backend.onrender.com/api/copilot', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
