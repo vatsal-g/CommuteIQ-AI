@@ -12,14 +12,14 @@ router.post("/", async (req, res) => {
   try {
     const { message } = req.body;
     const dashboardRes = await axios.get(
-      "http://localhost:5000/api/reliability/dashboard"
+      `${process.env.BACKEND_URL}/api/reliability/dashboard`
     );
 
     const recommendationRes = await axios.get(
-      "http://localhost:5000/api/recommendation"
+      `${process.env.BACKEND_URL}/api/recommendation`
     );
 const strategiesRes = await axios.get(
-  "http://localhost:5000/api/strategies"
+  `${process.env.BACKEND_URL}/api/strategies`
 );
 
 const strategiesData = strategiesRes.data;
