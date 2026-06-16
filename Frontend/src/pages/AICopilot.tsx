@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Send } from 'lucide-react'
-
+import ReactMarkdown from "react-markdown";
 interface Message {
   role: 'user' | 'ai'
   content: string
@@ -143,7 +143,15 @@ export default function AICopilot() {
               }}
             >
               <strong style={{ fontSize: 14 }}>{m.role === 'user' ? 'You' : 'CommuteIQ'}</strong>
-              <p style={{ color: 'var(--text-soft)', lineHeight: 1.55, margin: 0 }}>{m.content}</p>
+              <div
+  style={{
+    color: 'var(--text-soft)',
+    lineHeight: 1.55,
+    margin: 0,
+  }}
+>
+  <ReactMarkdown>{m.content}</ReactMarkdown>
+</div>
               {m.list && (
                 <ul className="grid gap-[5px] mt-1 pl-[18px]">
                   {m.list.map((item, j) => (
@@ -165,15 +173,6 @@ export default function AICopilot() {
     }}
   >
     <strong style={{ fontSize: 14 }}>CommuteIQ</strong>
-
-    <p
-      style={{
-        color: 'var(--text-soft)',
-        margin: 0
-      }}
-    >
-      Analyzing live traffic, weather and strategy data...
-    </p>
 
     <div
       className="flex gap-1.5 items-center"
