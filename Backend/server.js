@@ -25,24 +25,36 @@ app.use(
   copilotRoutes
 );
 
-mongoose.connect(process.env.MONGO_URI)
-.then(() => {
+// MongoDB connection diagnostics
+const uri = process.env.MONGO_URI;
 
-  console.log("MongoDB Connected");
+console.log("MONGO_URI exists:", Boolean(uri));
 
-  console.log(
-    "Database Name:",
-    mongoose.connection.db.databaseName
-  );
+try {
+  if (uri) {
+    const parsed = new URL(uri);
 
-})
-.catch(err => {
+    console.log("Mongo hostname:", parsed.hostname);
+    console.log("Username present:", Boolean(parsed.username));
+    console.log("Password present:", Boolean(parsed.password));
+    console.log("Database path:", parsed.pathname);
+  }
+} catch {
+  console.error("MONGO_URI is malformed");
+}
 
-  console.error("Mongo Error:");
-  console.error(err);
-
-});
-
+// MongoDB connection
+mongoose.connect(uri)
+  .then(() => {
+    console.log("MongoDB Connected");
+    console.log(
+      "Database Name:",
+      mongoose.connection.db.databaseName
+    );
+  })
+  .catch(err => {
+    console.error("Mongo Error:", err.message);
+  });
 app.use(
   "/api/reliability",
   reliabilityRoutes
