@@ -192,8 +192,8 @@ MongoDB Atlas
 # Team
 
 **Vatsal Goyal** 
-**Ishaan Verma**
-**Rahul Sharma**
+**Aarush Deewan**
+**Aaradhya Agarwal**
 **Arman Singh**
 
 B.Tech Computer Science Engineering
