@@ -1,0 +1,88 @@
+{
+  "dataset": "new data\\delay_training_table.csv",
+  "rows_total": 5999,
+  "rows_model_fit": 3313,
+  "rows_validation": 828,
+  "rows_final_test": 1858,
+  "fit_period_utc": [
+    "2026-10-24T00:13:00+00:00",
+    "2026-10-28T02:51:00+00:00"
+  ],
+  "validation_period_utc": [
+    "2026-10-28T02:53:00+00:00",
+    "2026-10-28T23:57:00+00:00"
+  ],
+  "test_period_utc": [
+    "2026-10-29T00:01:00+00:00",
+    "2026-10-30T23:56:00+00:00"
+  ],
+  "best_iteration": 520,
+  "validation_xgboost": {
+    "mae_minutes": 5.212015420464791,
+    "rmse_minutes": 9.535629902427745,
+    "r2": 0.8683463649493967
+  },
+  "test_xgboost": {
+    "mae_minutes": 5.60414993910538,
+    "rmse_minutes": 11.002597989971395,
+    "r2": 0.8165354152761435
+  },
+  "test_planned_delay_baseline": {
+    "mae_minutes": 9.005113024757804,
+    "rmse_minutes": 19.86303301945526,
+    "r2": 0.40206650679497047
+  },
+  "test_mae_improvement_vs_planned_delay_pct": 37.7670227603156,
+  "features_used": [
+    "crosses_state_border",
+    "distance_km",
+    "n_signals",
+    "toll_count",
+    "baseline_min",
+    "planned_eta_min",
+    "planned_delay",
+    "planned_rel",
+    "hour_ist",
+    "dow",
+    "is_peak",
+    "congestion_ratio",
+    "incident_count",
+    "road_closure_flag",
+    "speed_lag_5",
+    "speed_lag_15",
+    "speed_lag_30",
+    "speed_lag_60",
+    "speed_roll_mean_1h",
+    "speed_roll_std_1h",
+    "speed_roll_mean_3h",
+    "speed_roll_std_3h",
+    "lag15r",
+    "lag30r",
+    "lag60r",
+    "roll1r",
+    "roll3r",
+    "rollstd1r",
+    "hour_sin",
+    "hour_cos",
+    "dow_sin",
+    "dow_cos",
+    "route_id",
+    "mode",
+    "city",
+    "road_type"
+  ],
+  "features_not_used": [
+    "trip_id",
+    "departure_time_utc (ordering only)",
+    "split",
+    "delay_min (target)",
+    "actual_duration_min",
+    "arrived_within_tolerance",
+    "label_source",
+    "tolerance_min",
+    "p30r",
+    "p60r",
+    "p30_delta",
+    "p60_delta"
+  ]
+}
