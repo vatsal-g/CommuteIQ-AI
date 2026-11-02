@@ -134,6 +134,8 @@ MongoDB Atlas      Gemini AI
 - Python
 - Pandas
 - NumPy
+- Scikit-lean
+- XGBoost
 
 ### Deployment
 - Render
@@ -192,8 +194,6 @@ MongoDB Atlas
 # Team
 
 **Vatsal Goyal** 
-**Aarush Deewan**
-**Aaradhya Agarwal**
 **Arman Singh**
 
 B.Tech Computer Science Engineering
